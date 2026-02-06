@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BSH EXPENSES — Login</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: linear-gradient(90deg,#eaf6ff,#f7fbff);
+      font-family: Inter, system-ui, Arial;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(16,24,40,.06);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center px-4">
+
+  <div class="w-full max-w-md card p-6">
+    <h1 class="text-2xl font-bold text-center text-blue-600">
+      BSH EXPENSES
+    </h1>
+    <p class="text-center text-gray-500 mt-1">
+      Login to continue
+    </p>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="mt-6 space-y-4">
+      <div>
+        <label class="text-sm font-medium">Email</label>
+        <input name="email" type="email" required
+          class="mt-1 w-full border px-4 py-2 rounded-lg"
+          placeholder="Enter email" />
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Password</label>
+        <input name="password" type="password" required
+          class="mt-1 w-full border px-4 py-2 rounded-lg"
+          placeholder="Enter password" />
+      </div>
+
+      <button type="submit"
+        class="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700">
+        Sign In
+      </button>
+    </form>
+
+    <!-- MESSAGE -->
+    <div id="msg" class="text-center mt-4 text-sm"></div>
+
+    <!-- SIGNUP (ONLY IF ADMIN NOT EXISTS) -->
+    <div id="signupBox" class="text-center mt-6 hidden">
+      <p class="text-gray-500 text-sm">New user?</p>
+      <button id="goSignup"
+        class="mt-2 text-blue-600 underline">
+        Create Account
+      </button>
+    </div>
+  </div>
+
+<script>
+/* =============================
+   LOGIN SUBMIT
+============================= */
+document.getElementById("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.target;
+
+  const payload = {
+    email: form.email.value.trim(),
+    password: form.password.value
+  };
+
+  try {
+    const res = await fetch("/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      document.getElementById("msg").innerHTML =
+        `<span class="text-red-600">${data.message}</span>`;
+      return;
+    }
+
+    // ✅ Save token & role
+    localStorage.setItem("bsh_token", data.token);
+    localStorage.setItem("bsh_role", data.user.role);
+
+    // ✅ Redirect
+    window.location.href = "/admin/dashboard";
+
+  } catch (err) {
+    document.getElementById("msg").innerHTML =
+      `<span class="text-red-600">Server error</span>`;
+  }
+});
+
+/* =============================
+   CHECK ADMIN EXISTS
+============================= */
+fetch("/auth/admin-exists")
+  .then(res => res.json())
+  .then(data => {
+    if (!data.exists) {
+      document.getElementById("signupBox").classList.remove("hidden");
+    }
+  });
+</script>
+
+</body>
+</html>

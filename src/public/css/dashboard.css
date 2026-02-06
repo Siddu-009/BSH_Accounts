@@ -1,0 +1,92 @@
+/* Action buttons */
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(99,102,241,0.12);
+  background: #fff;
+  cursor: pointer;
+  transition: background .15s, transform .08s, box-shadow .08s;
+}
+
+.action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* EDIT */
+.action-btn.edit {
+  border-color: rgba(37,99,235,0.18);
+}
+
+.action-btn.edit:hover {
+  background: rgba(37,99,235,0.08);
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 4px 10px rgba(37,99,235,0.15);
+}
+
+/* DELETE */
+.action-btn.delete {
+  border-color: rgba(239,68,68,0.18);
+}
+
+.action-btn.delete:hover {
+  background: rgba(239,68,68,0.08);
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 4px 10px rgba(239,68,68,0.15);
+}
+
+.inline-input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5f5;
+  font-size: 13px;
+}
+.input-field {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  transition: all .15s ease;
+}
+
+.input-field:focus {
+  border-color: #2f8afc;
+  box-shadow: 0 0 0 4px rgba(47,138,252,0.15);
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.file-btn {
+  border: 1px dashed #93c5fd;
+  background: #eff6ff;
+}
+
+.file-btn:hover {
+  background: #dbeafe;
+}
+.file-btn:active {
+  background: #bfdbfe;
+}
+.flatpickr-calendar {
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  font-family: Inter, system-ui;
+}
+.flatpickr-day.today {
+  border-color: #2f8afc;
+}
+.flatpickr-day.selected {
+  background: #2f8afc;
+  border-color: #2f8afc;
+}
+

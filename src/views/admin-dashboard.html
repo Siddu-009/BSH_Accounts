@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSH EXPENSES - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5', // indigo-600
+                        'primary-hover': '#4338ca',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-100 text-gray-900 flex">
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="w-64 bg-white shadow-lg h-full fixed inset-y-0 left-0 overflow-y-auto transition-transform duration-300 ease-in-out z-30">
+    <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center space-x-3">
+            <i class="fas fa-chart-line text-2xl text-primary"></i>
+            <div>
+                <h2 class="text-xl font-bold">BSH EXPENSES</h2>
+                <p class="text-sm text-gray-500">Admin Panel</p>
+            </div>
+        </div>
+    </div>
+    <nav class="p-4">
+        <ul class="space-y-2">
+            <li>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-50 text-primary font-medium" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition" data-page="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition" data-page="login-history">
+                    <i class="fas fa-history"></i>
+                    <span>Login History</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition" data-page="reports">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- ================= MAIN ================= -->
+<main class="flex-1 ml-64 p-8 overflow-y-auto">
+    <header class="bg-white shadow-sm rounded-xl p-6 mb-8 flex justify-between items-center">
+        <div>
+            <h1 id="page-title" class="text-2xl font-bold flex items-center gap-3">
+                <i class="fas fa-tachometer-alt text-primary"></i> Admin Dashboard
+            </h1>
+            <p id="page-desc" class="text-gray-600 mt-1">Overview of your expense management system</p>
+        </div>
+    <div class="flex gap-4 flex-wrap">
+    <!-- Dashboard Button - Matching the active/selected style -->
+    <a href="/admin/dashboard" class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition flex items-center gap-2">
+        <i class="fas fa-tachometer-alt"></i> User Dashboard
+    </a>
+
+    <!-- Logout Button - Keeping your original active style -->
+   <button
+  id="logoutBtn"
+  class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition flex items-center gap-2">
+  <i class="fas fa-sign-out-alt"></i> Logout
+</button>
+
+</div>
+    </header>
+
+    <!-- ================= DASHBOARD PAGE ================= -->
+<div id="dashboard" class="page block">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Existing Cards -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-users text-primary text-xl"></i> Total Users
+            </h3>
+            <div id="totalUsers" class="text-3xl font-bold mt-4">2</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-user-check text-green-600 text-xl"></i> Active Users
+            </h3>
+            <div id="activeUsers" class="text-3xl font-bold mt-4">2</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-sign-in-alt text-gray-600 text-xl"></i> Logins Today
+            </h3>
+            <div class="text-3xl font-bold mt-4">68</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-heartbeat text-green-600 text-xl"></i> System Status
+            </h3>
+            <div class="text-2xl font-bold text-green-600 mt-4">Online</div>
+        </div>
+
+        <!-- Expenses-Based Cards -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-money-bill-wave text-red-600 text-xl"></i> Total Expenses (This Month)
+            </h3>
+            <div class="text-3xl font-bold mt-4 text-red-600">$8,740</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-receipt text-orange-600 text-xl"></i> Pending Bills
+            </h3>
+            <div class="text-3xl font-bold mt-4 text-orange-600">12</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-credit-card text-purple-600 text-xl"></i> Overdue Payments
+            </h3>
+            <div class="text-3xl font-bold mt-4 text-red-700">3</div>
+            <small class="text-sm text-red-600">Total: $2,150</small>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-chart-pie text-teal-600 text-xl"></i> Highest Expense Category
+            </h3>
+            <div class="text-2xl font-bold mt-4">Operations</div>
+            <div class="text-lg text-gray-600">$3,280</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-calendar-alt text-blue-600 text-xl"></i> Expenses Today
+            </h3>
+            <div class="text-3xl font-bold mt-4">$1,120</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-trending-down text-green-600 text-xl"></i> Savings This Month
+            </h3>
+            <div class="text-3xl font-bold mt-4 text-green-600">+$950</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-file-invoice-dollar text-indigo-600 text-xl"></i> Average Daily Expense
+            </h3>
+            <div class="text-3xl font-bold mt-4">$292</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold flex items-center gap-3 text-gray-700">
+                <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i> Budget Alert
+            </h3>
+            <div class="text-2xl font-bold mt-4 text-yellow-600">78% Used</div>
+            <small class="text-sm text-gray-600">of $11,000 monthly budget</small>
+        </div>
+    </div>
+</div>
+
+    <!-- ================= USERS PAGE ================= -->
+    <div id="users" class="page hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">All Users</h2>
+            <button id="open-create-modal" class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition flex items-center gap-2">
+                <i class="fas fa-user-plus"></i> Create User
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">User</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Role</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Last Login</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Logins</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">No users found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= OTHER PAGES (placeholders) ================= -->
+  <div id="login-history" class="page hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Header -->
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                <i class="fas fa-history text-primary text-xl"></i> Recent Logins
+            </h2>
+            <p class="text-gray-600 mt-2">Track and monitor all user login activity</p>
+        </div>
+
+        <!-- Optional: Search & Filter Bar -->
+        <div class="p-6 border-b border-gray-200 flex flex-col sm:flex-row gap-4">
+            <input type="text" placeholder="Search by username, email or IP..." 
+                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                <option>All Status</option>
+                <option>Success</option>
+                <option>Failed</option>
+            </select>
+            <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition">
+                Filter
+            </button>
+        </div>
+
+        <!-- Login History Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4">User</th>
+                        <th class="px-6 py-4">Username/Email</th>
+                        <th class="px-6 py-4">IP Address</th>
+                        <th class="px-6 py-4">Device/Browser</th>
+                        <th class="px-6 py-4">Location</th>
+                        <th class="px-6 py-4">Login Time</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+                                JD
+                            </div>
+                            <span class="font-medium">John Doe</span>
+                        </td>
+                        <td class="px-6 py-4">john@example.com</td>
+                        <td class="px-6 py-4">192.168.1.105</td>
+                        <td class="px-6 py-4">Chrome / Windows 11</td>
+                        <td class="px-6 py-4">New York, USA</td>
+                        <td class="px-6 py-4">
+                            Dec 30, 2025<br>
+                            <small class="text-gray-500">02:45 PM</small>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                Success
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button class="text-primary hover:underline text-sm">Details</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-semibold">
+                                AS
+                            </div>
+                            <span class="font-medium">Admin User</span>
+                        </td>
+                        <td class="px-6 py-4">admin@system.com</td>
+                        <td class="px-6 py-4">203.0.113.45</td>
+                        <td class="px-6 py-4">Safari / macOS</td>
+                        <td class="px-6 py-4">London, UK</td>
+                        <td class="px-6 py-4">
+                            Dec 30, 2025<br>
+                            <small class="text-gray-500">01:20 PM</small>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                Success
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button class="text-primary hover:underline text-sm">Details</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-600 text-white flex items-center justify-center font-semibold">
+                                GU
+                            </div>
+                            <span class="font-medium">Guest User</span>
+                        </td>
+                        <td class="px-6 py-4">guest123@example.com</td>
+                        <td class="px-6 py-4">198.51.100.67</td>
+                        <td class="px-6 py-4">Firefox / Linux</td>
+                        <td class="px-6 py-4">Unknown</td>
+                        <td class="px-6 py-4">
+                            Dec 29, 2025<br>
+                            <small class="text-gray-500">11:55 PM</small>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                                Failed
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button class="text-primary hover:underline text-sm">Details</button>
+                        </td>
+                    </tr>
+                    <!-- You can add more rows here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer: Info & Pagination -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-gray-600">Showing 3 of 156 login records</p>
+            <div class="flex gap-2">
+                <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">Previous</button>
+                <button class="px-4 py-2 bg-primary text-white rounded-lg">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reports" class="page hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Header -->
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                <i class="fas fa-chart-bar text-primary text-xl"></i> Reports
+            </h2>
+            <p class="text-gray-600 mt-2">View and analyze key metrics and trends</p>
+        </div>
+
+        <!-- Date Range Selector -->
+        <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <select id="reportType" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="overview">Overview</option>
+                    <option value="expenses">Expenses Report</option>
+                    <option value="logins">Login Activity</option>
+                    <option value="users">User Activity</option>
+                </select>
+                <input type="date" value="2025-12-01" class="px-4 py-2 border border-gray-300 rounded-lg">
+                <input type="date" value="2025-12-30" class="px-4 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <div class="flex gap-3">
+                <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition flex items-center gap-2">
+                    <i class="fas fa-sync"></i> Refresh
+                </button>
+                <button class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center gap-2">
+                    <i class="fas fa-download"></i> Export PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6">
+                <h3 class="text-lg font-semibold">Total Expenses</h3>
+                <div class="text-3xl font-bold mt-4">$45,920</div>
+                <p class="text-sm mt-2 opacity-90">This Month (Dec 2025)</p>
+            </div>
+            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-6">
+                <h3 class="text-lg font-semibold">Total Logins</h3>
+                <div class="text-3xl font-bold mt-4">1,248</div>
+                <p class="text-sm mt-2 opacity-90">This Month</p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-6">
+                <h3 class="text-lg font-semibold">Active Users</h3>
+                <div class="text-3xl font-bold mt-4">2</div>
+                <p class="text-sm mt-2 opacity-90">Currently Online</p>
+            </div>
+            <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl p-6">
+                <h3 class="text-lg font-semibold">Avg. Daily Expense</h3>
+                <div class="text-3xl font-bold mt-4">$1,531</div>
+                <p class="text-sm mt-2 opacity-90">This Month</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+            <!-- Expenses Over Time -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Monthly Expenses Trend</h3>
+                <div class="h-64 flex items-center justify-center bg-white rounded-lg border border-gray-200">
+                    <p class="text-gray-500">Line chart placeholder (e.g., Dec 1–30 expenses)</p>
+                </div>
+            </div>
+
+            <!-- Login Activity -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Daily Login Activity</h3>
+                <div class="h-64 flex items-center justify-center bg-white rounded-lg border border-gray-200">
+                    <p class="text-gray-500">Bar chart placeholder</p>
+                </div>
+            </div>
+
+            <!-- Expense Categories Pie -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Expenses by Category</h3>
+                <div class="h-64 flex items-center justify-center bg-white rounded-lg border border-gray-200">
+                    <p class="text-gray-500">Pie/Doughnut chart placeholder</p>
+                </div>
+            </div>
+
+            <!-- Top Users by Login -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-4">Top Users by Login Count</h3>
+                <div class="h-64 flex items-center justify-center bg-white rounded-lg border border-gray-200">
+                    <p class="text-gray-500">Horizontal bar chart placeholder</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <div class="p-6">
+            <h3 class="text-lg font-semibold mb-4">Recent Expense Transactions</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3">Date</th>
+                            <th class="px-6 py-3">Description</th>
+                            <th class="px-6 py-3">Category</th>
+                            <th class="px-6 py-3">Amount</th>
+                            <th class="px-6 py-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">Dec 30, 2025</td>
+                            <td class="px-6 py-4">Office Supplies Purchase</td>
+                            <td class="px-6 py-4">Operations</td>
+                            <td class="px-6 py-4 font-medium">$1,240</td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">Paid</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">Dec 29, 2025</td>
+                            <td class="px-6 py-4">Software Subscription</td>
+                            <td class="px-6 py-4">IT</td>
+                            <td class="px-6 py-4 font-medium">$899</td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Pending</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4">Dec 28, 2025</td>
+                            <td class="px-6 py-4">Marketing Campaign</td>
+                            <td class="px-6 py-4">Marketing</td>
+                            <td class="px-6 py-4 font-medium">$3,450</td>
+                            <td class="px-6 py-4"><span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">Paid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="settings" class="page hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Header -->
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                <i class="fas fa-cog text-primary text-xl"></i> System Settings
+            </h2>
+            <p class="text-gray-600 mt-2">Manage your system preferences and configuration</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-gray-200">
+            <div class="flex flex-wrap gap-1 px-6">
+                <button class="tab-button active px-6 py-4 text-sm font-medium border-b-2 border-primary text-primary" data-tab="general">
+                    General
+                </button>
+                <button class="tab-button px-6 py-4 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-primary" data-tab="security">
+                    Security
+                </button>
+                <button class="tab-button px-6 py-4 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-primary" data-tab="notifications">
+                    Notifications
+                </button>
+                <button class="tab-button px-6 py-4 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-primary" data-tab="backup">
+                    Backup & Restore
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-6">
+
+            <!-- General Tab -->
+            <div id="general" class="tab-content">
+                <h3 class="text-lg font-semibold mb-6">General Settings</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">System Name</label>
+                        <input type="text" value="Expense Tracker Pro" class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time Zone</label>
+                        <select class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>UTC</option>
+                            <option selected>America/New_York</option>
+                            <option>Europe/London</option>
+                            <option>Asia/Tokyo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date Format</label>
+                        <select class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>MM/DD/YYYY</option>
+                            <option selected>DD/MM/YYYY</option>
+                            <option>YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Currency</label>
+                        <select class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>USD ($)</option>
+                            <option>EUR (€)</option>
+                            <option>GBP (£)</option>
+                            <option selected>INR (₹)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div id="security" class="tab-content hidden">
+                <h3 class="text-lg font-semibold mb-6">Security Settings</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Two-Factor Authentication (2FA)</p>
+                            <p class="text-sm text-gray-600">Add an extra layer of security to your account</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Session Timeout</p>
+                            <p class="text-sm text-gray-600">Automatically log out after inactivity</p>
+                        </div>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option>30 minutes</option>
+                            <option selected>1 hour</option>
+                            <option>2 hours</option>
+                            <option>Never</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Lock Failed Login Attempts</p>
+                            <p class="text-sm text-gray-600">Block IP after multiple failed attempts</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Failed Attempts</label>
+                        <input type="number" value="5" min="3" max="10" class="w-full md:w-1/4 px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notifications" class="tab-content hidden">
+                <h3 class="text-lg font-semibold mb-6">Notification Preferences</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Email Notifications</p>
+                            <p class="text-sm text-gray-600">Receive updates via email</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Budget Alerts</p>
+                            <p class="text-sm text-gray-600">Notify when expenses reach threshold</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800">Daily Summary</p>
+                            <p class="text-sm text-gray-600">Get a daily expense summary email</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Restore Tab -->
+            <div id="backup" class="tab-content hidden">
+                <h3 class="text-lg font-semibold mb-6">Backup & Data Management</h3>
+                <div class="space-y-6">
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <p class="font-medium text-gray-800 mb-2">Last Backup</p>
+                        <p class="text-sm text-gray-600">December 29, 2025 at 11:30 PM</p>
+                        <button class="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition">
+                            Create Backup Now
+                        </button>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <p class="font-medium text-blue-900 mb-2">Automatic Backups</p>
+                        <p class="text-sm text-blue-800">Backups are automatically created daily at midnight</p>
+                    </div>
+                    <div>
+                        <button class="px-6 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition">
+                            Export All Data (CSV)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Save Button -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+            <button class="px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Simple Tab Switching Script -->
+    <script>
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active tab button
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active', 'text-primary', 'border-primary');
+                    btn.classList.add('text-gray-600', 'border-transparent');
+                });
+                button.classList.add('active', 'text-primary', 'border-primary');
+                button.classList.remove('text-gray-600', 'border-transparent');
+
+                // Show selected tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(button.dataset.tab).classList.remove('hidden');
+            });
+        });
+    </script>
+</div>
+
+    <!-- ================= CREATE USER MODAL ================= -->
+<!-- CREATE USER MODAL -->
+<!-- CREATE USER MODAL -->
+<div class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50 backdrop-blur-sm" 
+     id="create-user-modal">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden 
+              transition-all duration-300 scale-95 opacity-0 pointer-events-none"
+       id="modal-content">
+    
+    <!-- Modal Header -->
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-6">
+      <div class="flex justify-between items-center">
+        <h3 class="text-2xl font-bold">Create New User</h3>
+        <button type="button" id="close-modal-x" class="text-white hover:text-gray-200 text-3xl transition">
+          &times;
+        </button>
+      </div>
+      <p class="text-indigo-100 mt-2 text-sm">A temporary password will be generated automatically</p>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="p-8">
+      <form id="createUserForm" class="space-y-6">
+        <div>
+          <label for="user-email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+          <input id="user-email" type="email" required placeholder="user@example.com"
+                 class="w-full px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-600 transition">
+        </div>
+
+        <div>
+          <label for="user-name" class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+          <input id="user-name" type="text" required placeholder="John Doe"
+                 class="w-full px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-600 transition">
+        </div>
+
+        <div>
+          <label for="user-role" class="block text-sm font-semibold text-gray-700 mb-2">Role</label>
+          <select id="user-role" required
+                  class="w-full px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-600 transition bg-white">
+            <option value="" disabled selected>Select Role</option>
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+      </form>
+
+      <!-- Modal Footer Buttons -->
+      <div class="flex justify-end gap-4 mt-10">
+        <button type="button" id="close-modal-cancel"
+                class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition">
+          Cancel
+        </button>
+        <button type="button" id="createUserBtn"
+                class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition flex items-center gap-2">
+          <i class="fas fa-user-plus"></i> Create User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- SUCCESS: Temporary Password Reveal -->
+<!-- TEMPORARY PASSWORD POPUP (Sweet Alert Style) -->
+<div id="tempPasswordPopup" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center transform scale-95 opacity-0 transition-all duration-300">
+    <div class="text-6xl mb-6 text-emerald-500">✅</div>
+    <h3 class="text-2xl font-bold text-gray-800 mb-4">User Created Successfully!</h3>
+    <p class="text-gray-600 mb-6">Please share this temporary password with the user:</p>
+
+    <div class="bg-gray-100 rounded-xl p-4 mb-8">
+      <div id="popupPassword" class="text-2xl font-mono font-bold text-indigo-700 tracking-wider select-all">
+        TEMP123ABC
+      </div>
+    </div>
+
+    <div class="flex gap-4 justify-center">
+      <button id="popupCopyBtn" class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition flex items-center gap-2">
+        <i class="fas fa-copy"></i> Copy Password
+      </button>
+      <button id="popupCloseBtn" class="px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition">
+        Done
+      </button>
+    </div>
+
+    <p class="text-sm text-gray-500 mt-6">The user will be required to change this password on first login.</p>
+  </div>
+</div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/admin-tabs.js"></script>
+<script src="/js/admin.js"></script>
+<script src="/js/admin-users.js"></script>
+</body>
+</html>
